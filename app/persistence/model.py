@@ -14,3 +14,12 @@ class Player:
     name: str | None = None
     goals: int | None = 0
     team_id: int | None = None
+
+
+@dataclass
+class Stadium:
+    id_: int | None = None
+    name: str | None = None
+    team_id: int | None = None
+
+
