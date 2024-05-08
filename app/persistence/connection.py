@@ -1,3 +1,5 @@
+import logging
+
 from mysql.connector.pooling import MySQLConnectionPool
 from typing import Self, Any
 
@@ -46,7 +48,7 @@ class MySQLConnectionPoolBuilder:
         return cls()
 
 
-conn_pool = MySQLConnectionPoolBuilder.builder().port(3308).build()
+connection_pool = MySQLConnectionPoolBuilder.builder().port(3307).build()
 
 
 # test_connection_pool = MySQLConnectionPoolBuilder.builder().port(3308).build()
@@ -54,13 +56,13 @@ def create_tables(connection_pool: MySQLConnectionPool):
     with connection_pool.get_connection() as conn:
         cursor = conn.cursor()
 
-        teams_table_sql = '''
-        create table if not exists teams (
-        id_ integer primary  key auto_increment,
-        name varchar(50) not null,
-        points integer default 0
-        )
-    '''
+    #     teams_table_sql = '''
+    #     create table if not exists teams (
+    #     id_ integer primary  key auto_increment,
+    #     name varchar(50) not null,
+    #     points integer default 0
+    #     )
+    # '''
     #
     #     players_table_sql = '''
     #     create table if not exists players (
@@ -72,4 +74,14 @@ def create_tables(connection_pool: MySQLConnectionPool):
     #     )
     # '''
     #     cursor.execute(teams_table_sql)
-        cursor.execute(teams_table_sql)
+
+        stadium_table_sql = '''
+             create table if not exists stadia (
+             id_ integer primary  key auto_increment,
+             name varchar(50) not null,
+             team_id integer,
+             foreign key (team_id) references teams(id_) on delete cascade on update cascade
+             )
+         '''
+        logging.info("EXECUTED")
+        cursor.execute(stadium_table_sql)

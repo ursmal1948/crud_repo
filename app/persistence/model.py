@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 
 
@@ -21,5 +22,3 @@ class Stadium:
     id_: int | None = None
     name: str | None = None
     team_id: int | None = None
-
-
