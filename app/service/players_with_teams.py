@@ -21,14 +21,16 @@ class PlayersWithTeamsService:
         )
         return self.player_repository.insert(player)
 
-    # def get_team_players(self, team: Team):
-    #     team_from_db = self.team_repository.find_by_name(team.name)
-    #     if not team_from_db:
-    #         raise ValueError('Team not found')
-    def transfer_players_with_goals_higher_than_to_the_team(self, goal_limit: int, team_name: str):
-        team_from_db = self.team_repository.find_by_name(team_name)
+    def transfer_players_with_goals_higher_than_to_the_team(self, goal_limit: int, team: Team):
+        team_from_db = self.team_repository.find_by_name(team.name)
         if not team_from_db:
             raise ValueError('Team not found')
 
         players_to_be_transfered = self.player_repository.find_all_with_goals_higher_than(goal_limit)
-        return [self.player_repository.update(player.id_, player) for player in players_to_be_transfered]
+        return [self.player_repository.update(player.id_, Player(goals=player.goals, team_id=team_from_db.id_)) for
+                player in players_to_be_transfered]
+        # return [self.player_repository.change_player_team(player, team_from_db) for player in players_to_be_transfered]
+
+    # def change_player_team(self, player: Player, team: Team):
+    #     new_team_id = team.id_
+    #     return self.update(player.id_, Player(goals=player.goals, team_id=new_team_id))
